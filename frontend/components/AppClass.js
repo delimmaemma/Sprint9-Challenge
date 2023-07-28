@@ -14,17 +14,14 @@ let movement = 0
 let index = 4
 
 export default class AppClass extends React.Component {
-  constructor() {
-  super()
-    this.state = {
-      x: xcoord,
-      y: ycoord,
-      steps: initialSteps,
-      email: initialEmail,
-      message: initialMessage,
-      response: initialResponse,
-      index: initialIndex
-    }
+  state = {
+    x: xcoord,
+    y: ycoord,
+    steps: initialSteps,
+    email: initialEmail,
+    message: initialMessage,
+    response: initialResponse,
+    index: initialIndex
   }
   
   reset = () => {
@@ -50,44 +47,53 @@ export default class AppClass extends React.Component {
     //Down
     else if(press === 4 && xcoord + 1 < 4) xcoord += 1;
     
-    this.setState({...this.state, x: xcoord, y: ycoord})
+    // this.setState({...this.state, x: xcoord, y: ycoord})
     this.getNextIndex(press)
 
     //changing x and y coords in state doesn't work
   }
 
-  getXYMessage = (press) => {
-    this.getXY(press)
-    this.setState({...this.state, message: `Coordinates (${xcoord}, ${ycoord})`})
-
-    //works
-  }
-
   getNextIndex = (direction) => {
     //Left
-    if(direction === 1 && index > 0) index -= 1;
+    if(direction === 1 && index > 0) {
+      index -= 1;
+      movement += 1
+    }
     //Up
-    else if(direction === 2 && index - 3 > 0) index -= 3;
+    else if(direction === 2 && index - 3 >= 0) {
+      index -= 3;
+      movement += 3
+    }
     //Right
-    else if(direction === 3 && index < 8) index += 1;
+    else if(direction === 3 && index < 8) {
+      index += 1;
+      movement += 1
+    }
     //Down
-    else if(direction === 4 && index + 3 < 8) index += 3;
-  
-    this.setState({...this.state, index: this.index})
-    this.move(direction)
+    else if(direction === 4 && index + 3 <= 8) {
+      index += 3;
+      movement += 3
+    }
 
-    //changing value of state.index doesn't work
+    if(index === 2) {
+      xcoord = 1
+      ycoord = 3
+    } else if(index === 3) {
+      xcoord = 2
+      ycoord = 1
+    } else if(index === 5) {
+      xcoord = 2
+      ycoord = 3
+    } else if(index === 6) {
+      xcoord = 3
+      ycoord = 1
+    }
+  
+    this.move(direction)
   }
 
-  move = (direction) => {
-    //Control movement for left/right
-    if(direction === 1 || direction === 3) movement += 1;
-    //Control movement for up/down
-    else if(direction === 2 || direction === 4) movement += 3;
-
-    
-    this.setState({...this.state, steps: movement})
-    console.log(this.state)
+  move = () => {
+    this.setState({...this.state, x: xcoord, y: ycoord, message: `Coordinates (${xcoord}, ${ycoord})`, steps: movement, index: index})
     return movement
 
     //movement works, logging it doesn't work
@@ -134,10 +140,10 @@ export default class AppClass extends React.Component {
           <h3 id="message">{this.state.response}</h3>
         </div>
         <div id="keypad">
-          <button id="left" onClick={() => {this.getXYMessage(1)}}>LEFT</button>
-          <button id="up" onClick={() => {this.getXYMessage(2)}}>UP</button>
-          <button id="right" onClick={() => {this.getXYMessage(3)}}>RIGHT</button>
-          <button id="down" onClick={() => {this.getXYMessage(4)}}>DOWN</button>
+          <button id="left" onClick={() => {this.getXY(1)}}>LEFT</button>
+          <button id="up" onClick={() => {this.getXY(2)}}>UP</button>
+          <button id="right" onClick={() => {this.getXY(3)}}>RIGHT</button>
+          <button id="down" onClick={() => {this.getXY(4)}}>DOWN</button>
           <button id="reset" onClick={() => {this.reset()}}>reset</button>
         </div>
         <form onSubmit={this.onSubmit}>

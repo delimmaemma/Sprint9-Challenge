@@ -34,13 +34,11 @@ export default function AppFunctional(props) {
     //Down
     else if(press === 4 && xcoord + 1 < 4) xcoord += 1;
     
-    setState({...state, x: xcoord, y: ycoord})
     getNextIndex(press)
   }
 
   function getXYMessage(press) {
     getXY(press)
-    setMessage(`Coordinates (${xcoord}, ${ycoord})`)
   }
 
   function reset() {
@@ -53,24 +51,46 @@ export default function AppFunctional(props) {
   function getNextIndex(direction) {
 
     //Left
-    if(direction === 1 && index > 0) setIndex(index - 1);
+    if(direction === 1 && index > 0) {
+      setIndex(index - 1);
+      setMovement(movement + 1)
+    }
     //Up
-    else if(direction === 2 && index - 3 > 0) setIndex(index - 3);
+    else if(direction === 2 && index - 3 >= 0) {
+      setIndex(index - 3);
+      setMovement(movement + 1)
+    }
     //Right
-    else if(direction === 3 && index < 8) setIndex(index + 1);
+    else if(direction === 3 && index < 8) {
+      setIndex(index + 1);
+      setMovement(movement + 1)
+    }
     //Down
-    else if(direction === 4 && index + 3 < 8) setIndex(index + 3);
+    else if(direction === 4 && index + 3 <= 8) {
+      setIndex(index + 3);
+      setMovement(movement + 1)
+    }
+
+    if(index === 2) {
+      xcoord = 1
+      ycoord = 3
+    } else if(index === 3) {
+      xcoord = 2
+      ycoord = 1
+    } else if(index === 5) {
+      xcoord = 2
+      ycoord = 3
+    } else if(index === 6) {
+      xcoord = 3
+      ycoord = 1
+    }
 
     move(direction)
   }
 
-  function move(direction) {
-    //Control movement for left/right
-    if(direction === 1 || direction === 3) setMovement(movement + 1);
-    //Control movement for up/down
-    else if(direction === 2 || direction === 4) setMovement(movement + 3)
-
-    setState({...state, steps: movement})
+  function move() {
+    setMessage(`Coordinates (${xcoord}, ${ycoord})`)
+    setState({...state, x: xcoord, y: ycoord, steps: movement})
     return movement
   }
 
