@@ -93,7 +93,7 @@ export default class AppClass extends React.Component {
   }
 
   move = () => {
-    this.setState({...this.state, x: xcoord, y: ycoord, message: `Coordinates (${xcoord}, ${ycoord})`, steps: movement, index: index})
+    this.setState({...this.state, x: xcoord, y: ycoord, message: `Coordinates (${ycoord}, ${xcoord})`, steps: movement, index: index})
     return movement
 
     //movement works, logging it doesn't work

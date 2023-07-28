@@ -71,6 +71,10 @@ export default function AppFunctional(props) {
       setMovement(movement + 1)
     }
 
+    move(direction)
+  }
+
+  function edge() {
     if(index === 2) {
       xcoord = 1
       ycoord = 3
@@ -84,14 +88,11 @@ export default function AppFunctional(props) {
       xcoord = 3
       ycoord = 1
     }
-
-    move(direction)
   }
 
   function move() {
-    setMessage(`Coordinates (${xcoord}, ${ycoord})`)
+    setMessage(`Coordinates (${ycoord}, ${xcoord})`)
     setState({...state, x: xcoord, y: ycoord, steps: movement})
-    return movement
   }
 
   function onChange(evt) {
@@ -121,7 +122,7 @@ export default function AppFunctional(props) {
         {
           [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
             <div key={idx} className={`square${idx === index ? ' active' : ''}`}>
-              {idx === index ? 'B' : null}
+              {idx === index ? 'B' : null}{edge()}
             </div>
           ))
         }
