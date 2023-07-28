@@ -23,7 +23,6 @@ export default function AppFunctional(props) {
   const [movement, setMovement] = useState(initialSteps)
   const [state, setState] = useState(initialState)
   const [response, setResponse] = useState(initialResponse)
-  const [email, setEmail] = useState(initialEmail)
 
   function getXY(press) {
     //Left
