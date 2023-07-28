@@ -22,3 +22,12 @@ root.render(
     </Routes>
   </BrowserRouter>
 )
+
+//Failing tests:
+  //res.response.data.message -> data is undefined
+  //success messages do not show right number value following name
+  //Out of bounds messages render before they're supposed to
+  //B shouldn't wrap to the next line
+  //Movement calculator is off
+  //Coordinates are off
+

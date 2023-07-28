@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const initialMessage = 'Coordinates (2, 2)'
 const initialEmail = ''
-const initialResponse = 'Waiting for move...'
+const initialResponse = ''
 const initialSteps = 0
 const initialIndex = 4
 const initialState = {
@@ -15,6 +15,8 @@ const initialState = {
 const URL = 'http://localhost:9000/api/result'
 let xcoord = 2
 let ycoord = 2
+let xfake = 2
+let yfake = 2
 
 export default function AppFunctional(props) {
 
@@ -26,13 +28,48 @@ export default function AppFunctional(props) {
 
   function getXY(press) {
     //Left
-    if(press === 1 && ycoord - 1 > 0) ycoord -= 1;
+    if(press === 1 && ycoord - 1 > 0) {
+      ycoord -= 1;
+      setResponse(initialResponse)
+    }
     //Up
-    else if(press === 2 && xcoord - 1 > 0) xcoord -= 1;
+    else if(press === 2 && xcoord - 1 > 0) {
+      xcoord -= 1;
+      setResponse(initialResponse)
+    }
     //Right
-    else if(press === 3 && ycoord + 1 < 4) ycoord += 1;
+    else if(press === 3 && ycoord + 1 < 4) {
+      ycoord += 1;
+      setResponse(initialResponse)
+    }
     //Down
-    else if(press === 4 && xcoord + 1 < 4) xcoord += 1;
+    else if(press === 4 && xcoord + 1 < 4) {
+      xcoord += 1;
+      setResponse(initialResponse)
+    }
+
+    if(press === 1) yfake -= 1;
+    else if(press === 2) xfake -= 1
+    else if(press === 3) yfake += 1
+    else if(press === 4) xfake += 1
+
+
+    if(press === 1 && yfake <= 0) {
+      setResponse("You can't go left")
+      yfake = ycoord
+    }
+    else if(press === 2 && xfake <= 0) {
+      setResponse("You can't go up")
+      xfake = xcoord
+    }
+    else if(press === 3 && yfake >= 4) {
+      setResponse("You can't go right")
+      yfake = ycoord
+    }
+    else if(press === 4 && xfake >= 4) {
+      setResponse("You can't go down")
+      xfake = xcoord
+    }
     
     getNextIndex(press)
   }
@@ -45,7 +82,10 @@ export default function AppFunctional(props) {
     xcoord = 2;
     ycoord = 2;
     setMessage(initialMessage);
+    setResponse(initialResponse)
     setIndex(initialIndex);
+    setState(initialState)
+    setMovement(initialSteps)
   }
 
   function getNextIndex(direction) {
@@ -91,7 +131,7 @@ export default function AppFunctional(props) {
   }
 
   function move() {
-    setMessage(`Coordinates (${ycoord}, ${xcoord})`)
+    setMessage(`(${ycoord}, ${xcoord})`)
     setState({...state, x: xcoord, y: ycoord, steps: movement})
   }
 
@@ -115,7 +155,7 @@ export default function AppFunctional(props) {
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
-        <h3 id="coordinates">{message}</h3>
+        <h3 id="coordinates">Coordinates {message}</h3>
         <h3 id="steps">You moved {movement} times</h3>
       </div>
       <div id="grid">

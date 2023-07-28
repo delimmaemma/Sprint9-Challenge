@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 
-const initialMessage = 'Coordinates (2, 2)'
-const initialResponse = 'Waiting for move...'
+const initialMessage = '(2, 2)'
+const initialResponse = ''
 const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4
@@ -10,8 +10,11 @@ const URL = 'http://localhost:9000/api/result'
 
 let xcoord = 2
 let ycoord = 2
+let xfake = 2
+let yfake = 2
 let movement = 0
 let index = 4
+let response = ''
 
 export default class AppClass extends React.Component {
   state = {
@@ -37,42 +40,74 @@ export default class AppClass extends React.Component {
     })
   }
 
-  getXY = (press) => {
-    //Left
-    if(press === 1 && ycoord - 1 > 0) ycoord -= 1;
-    //Up
-    else if(press === 2 && xcoord - 1 > 0) xcoord -= 1;
-    //Right
-    else if(press === 3 && ycoord + 1 < 4) ycoord += 1;
-    //Down
-    else if(press === 4 && xcoord + 1 < 4) xcoord += 1;
+    getXY = press => {
+      //Left
+      if(press === 1 && ycoord - 1 > 0) {
+        ycoord -= 1;
+        response = initialResponse
+      }
+      //Up
+      else if(press === 2 && xcoord - 1 > 0) {
+        xcoord -= 1;
+        response = initialResponse
+      }
+      //Right
+      else if(press === 3 && ycoord + 1 < 4) {
+        ycoord += 1;
+        response = initialResponse
+      }
+      //Down
+      else if(press === 4 && xcoord + 1 < 4) {
+        xcoord += 1;
+        response = initialResponse
+      }
+  
+      if(press === 1) yfake -= 1;
+      else if(press === 2) xfake -= 1
+      else if(press === 3) yfake += 1
+      else if(press === 4) xfake += 1
+  
+  
+      if(press === 1 && yfake <= 0) {
+        response = "You can't go left"
+        yfake = ycoord
+      }
+      else if(press === 2 && xfake <= 0) {
+        response = "You can't go up"
+        xfake = xcoord
+      }
+      else if(press === 3 && yfake >= 4) {
+        response = "You can't go right"
+        yfake = ycoord
+      }
+      else if(press === 4 && xfake >= 4) {
+        response = "You can't go down"
+        xfake = xcoord
+    }
     
-    // this.setState({...this.state, x: xcoord, y: ycoord})
     this.getNextIndex(press)
-
-    //changing x and y coords in state doesn't work
   }
 
   getNextIndex = (direction) => {
     //Left
-    if(direction === 1 && index > 0) {
+    if(direction === 1 && index > 0 ) {
       index -= 1;
       movement += 1
     }
     //Up
     else if(direction === 2 && index - 3 >= 0) {
       index -= 3;
-      movement += 3
+      movement += 1
     }
     //Right
-    else if(direction === 3 && index < 8) {
+    else if(direction === 3 && index < 8 ) {
       index += 1;
       movement += 1
     }
     //Down
     else if(direction === 4 && index + 3 <= 8) {
       index += 3;
-      movement += 3
+      movement += 1
     }
 
     if(index === 2) {
@@ -93,16 +128,12 @@ export default class AppClass extends React.Component {
   }
 
   move = () => {
-    this.setState({...this.state, x: xcoord, y: ycoord, message: `Coordinates (${ycoord}, ${xcoord})`, steps: movement, index: index})
+    this.setState({...this.state, x: xcoord, y: ycoord, message: `(${ycoord}, ${xcoord})`, steps: movement, index: index, response: response})
     return movement
-
-    //movement works, logging it doesn't work
   }
 
   onChange = (evt) => {
     this.setState({...this.state, email: evt.target.value})
-
-    //works
   }
 
   onSubmit = (evt) => {
@@ -110,13 +141,11 @@ export default class AppClass extends React.Component {
     axios.post(URL, this.state)
       .then(res => {
         this.setState({...this.state, response: res.data.message})
-        reset()
+        this.reset()
       })
       .catch(err => {
-        this.setState({...this.state, response: err.response.data.message})
+        this.setState({...this.state, email: '', response: err.response.data.message})
       })
-
-    //works
   }
 
   render() {
@@ -124,14 +153,14 @@ export default class AppClass extends React.Component {
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">{this.state.message}</h3>
+          <h3 id="coordinates">Coordinates {this.state.message}</h3>
           <h3 id="steps">You moved {this.state.steps} times</h3>
         </div>
         <div id="grid">
           {
             [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
               <div key={idx} className={`square${idx === this.state.index ? ' active' : ''}`}>
-                {idx === this.state.index ? 'B' : null}
+                {idx === this.state.index ? 'B' : null}{console.log(index)}
               </div>
             ))
           }
