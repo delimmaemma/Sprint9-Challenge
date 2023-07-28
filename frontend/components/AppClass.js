@@ -107,7 +107,7 @@ export default class AppClass extends React.Component {
         reset()
       })
       .catch(err => {
-        this.setState({...this.state, email: '', response: err.response.data.message})
+        this.setState({...this.state, response: err.response.data.message})
       })
 
     //works
