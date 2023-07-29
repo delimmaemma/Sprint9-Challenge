@@ -1,185 +1,158 @@
-import React from 'react'
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 
-const initialMessage = '(2, 2)'
-const initialResponse = ''
-const initialEmail = ''
-const initialSteps = 0
-const initialIndex = 4
-const URL = 'http://localhost:9000/api/result'
-
-let xcoord = 2
-let ycoord = 2
-let xfake = 2
-let yfake = 2
-let movement = 0
-let index = 4
-let response = ''
+const initialMessage = '(2, 2)';
+const initialResponse = '';
+const initialEmail = '';
+const initialSteps = 0;
+const initialIndex = 4;
+const URL = 'http://localhost:9000/api/result';
 
 export default class AppClass extends React.Component {
-  state = {
-    x: xcoord,
-    y: ycoord,
-    steps: initialSteps,
-    email: initialEmail,
-    message: initialMessage,
-    response: initialResponse,
-    index: initialIndex
+  constructor(props) {
+    super(props);
+    this.state = {
+      x: 2,
+      y: 2,
+      steps: initialSteps,
+      email: initialEmail,
+      message: initialMessage,
+      response: initialResponse,
+      index: initialIndex,
+    };
   }
-  
+
   reset = () => {
     this.setState({
-      ...this.state,
       x: 2,
       y: 2,
       message: initialMessage,
       email: initialEmail,
       steps: initialSteps,
       response: initialResponse,
-      index: initialIndex
-    })
-  }
+      index: initialIndex,
+    });
+  };
 
-    getXY = press => {
-      //Left
-      if(press === 1 && ycoord - 1 > 0) {
-        ycoord -= 1;
-        response = initialResponse
-      }
-      //Up
-      else if(press === 2 && xcoord - 1 > 0) {
-        xcoord -= 1;
-        response = initialResponse
-      }
-      //Right
-      else if(press === 3 && ycoord + 1 < 4) {
-        ycoord += 1;
-        response = initialResponse
-      }
-      //Down
-      else if(press === 4 && xcoord + 1 < 4) {
-        xcoord += 1;
-        response = initialResponse
-      }
-  
-      if(press === 1) yfake -= 1;
-      else if(press === 2) xfake -= 1
-      else if(press === 3) yfake += 1
-      else if(press === 4) xfake += 1
-  
-  
-      if(press === 1 && yfake <= 0) {
-        response = "You can't go left"
-        yfake = ycoord
-      }
-      else if(press === 2 && xfake <= 0) {
-        response = "You can't go up"
-        xfake = xcoord
-      }
-      else if(press === 3 && yfake >= 4) {
-        response = "You can't go right"
-        yfake = ycoord
-      }
-      else if(press === 4 && xfake >= 4) {
-        response = "You can't go down"
-        xfake = xcoord
+  getXY = (press) => {
+    const { x, y, index } = this.state;
+    const changes = [
+      [0, -1], // Left
+      [-1, 0], // Up
+      [0, 1],  // Right
+      [1, 0],  // Down
+    ];
+
+    const [dx, dy] = changes[press - 1];
+    const yfake = y + dy;
+    const xfake = x + dx;
+
+    let response = initialResponse;
+    if (yfake <= 0) {
+      response = "You can't go up";
+    } else if (xfake <= 0) {
+      response = "You can't go left";
+    } else if (yfake >= 4) {
+      response = "You can't go down";
+    } else if (xfake >= 4) {
+      response = "You can't go right";
     }
-    
-    this.getNextIndex(press)
-  }
+
+    if (response === initialResponse) {
+      this.setState((prevState) => ({
+        x: prevState.x + dx,
+        y: prevState.y + dy,
+        response: initialResponse,
+      }));
+      this.getNextIndex(press);
+    } else {
+      this.setState({ response });
+    }
+  };
 
   getNextIndex = (direction) => {
-    //Left
-    if(direction === 1 && index > 0 ) {
-      index -= 1;
-      movement += 1
-    }
-    //Up
-    else if(direction === 2 && index - 3 >= 0) {
-      index -= 3;
-      movement += 1
-    }
-    //Right
-    else if(direction === 3 && index < 8 ) {
-      index += 1;
-      movement += 1
-    }
-    //Down
-    else if(direction === 4 && index + 3 <= 8) {
-      index += 3;
-      movement += 1
-    }
+    const { index } = this.state;
+    const changes = [
+      [0, -1], // Left
+      [-1, 0], // Up
+      [0, 1],  // Right
+      [1, 0],  // Down
+    ];
 
-    if(index === 2) {
-      xcoord = 1
-      ycoord = 3
-    } else if(index === 3) {
-      xcoord = 2
-      ycoord = 1
-    } else if(index === 5) {
-      xcoord = 2
-      ycoord = 3
-    } else if(index === 6) {
-      xcoord = 3
-      ycoord = 1
-    }
-  
-    this.move(direction)
-  }
+    const [dx, dy] = changes[direction - 1];
+    const nextIndex = index + (dx + dy * 3);
+
+    const coordinatesMap = {
+      2: { x: 1, y: 3 },
+      3: { x: 2, y: 1 },
+      5: { x: 2, y: 3 },
+      6: { x: 3, y: 1 },
+    };
+
+    this.setState((prevState) => ({
+      x: coordinatesMap[nextIndex]?.x || prevState.x,
+      y: coordinatesMap[nextIndex]?.y || prevState.y,
+      index: nextIndex,
+    }));
+
+    this.move();
+  };
 
   move = () => {
-    this.setState({...this.state, x: xcoord, y: ycoord, message: `(${ycoord}, ${xcoord})`, steps: movement, index: index, response: response})
-    return movement
-  }
+    this.setState((prevState) => ({
+      steps: prevState.steps + 1,
+      message: `(${prevState.y}, ${prevState.x})`,
+    }));
+  };
 
   onChange = (evt) => {
-    this.setState({...this.state, email: evt.target.value})
-  }
+    this.setState({ email: evt.target.value });
+  };
 
   onSubmit = (evt) => {
-    evt.preventDefault()
+    evt.preventDefault();
     axios.post(URL, this.state)
-      .then(res => {
-        this.setState({...this.state, response: res.data.message})
-        this.reset()
+      .then((res) => {
+        this.setState({ response: res.data.message });
+        this.reset();
       })
-      .catch(err => {
-        this.setState({...this.state, email: '', response: err.response.data.message})
-      })
-  }
+      .catch((err) => {
+        this.setState({ email: '', response: err.response.data.message });
+      });
+  };
 
   render() {
-    const { className } = this.props
+    const { className } = this.props;
+    const { x, y, steps, response, index } = this.state;
+
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates {this.state.message}</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="coordinates">Coordinates ({x}, {y})</h3>
+          <h3 id="steps">You moved {steps} times</h3>
         </div>
         <div id="grid">
-          {
-            [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-              <div key={idx} className={`square${idx === this.state.index ? ' active' : ''}`}>
-                {idx === this.state.index ? 'B' : null}{console.log(index)}
-              </div>
-            ))
-          }
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((idx) => (
+            <div key={idx} className={`square${idx === index ? ' active' : ''}`}>
+              {idx === index ? 'B' : null}
+            </div>
+          ))}
         </div>
         <div className="info">
-          <h3 id="message">{this.state.response}</h3>
+          <h3 id="message">{response}</h3>
         </div>
         <div id="keypad">
-          <button id="left" onClick={() => {this.getXY(1)}}>LEFT</button>
-          <button id="up" onClick={() => {this.getXY(2)}}>UP</button>
-          <button id="right" onClick={() => {this.getXY(3)}}>RIGHT</button>
-          <button id="down" onClick={() => {this.getXY(4)}}>DOWN</button>
-          <button id="reset" onClick={() => {this.reset()}}>reset</button>
+          <button id="left" onClick={() => { this.getXY(2) }}>LEFT</button>
+          <button id="up" onClick={() => { this.getXY(1) }}>UP</button>
+          <button id="right" onClick={() => { this.getXY(4) }}>RIGHT</button>
+          <button id="down" onClick={() => { this.getXY(3) }}>DOWN</button>
+          <button id="reset" onClick={() => { this.reset() }}>reset</button>
         </div>
         <form onSubmit={this.onSubmit}>
           <input id="email" type="email" placeholder="type email" onChange={this.onChange} value={this.state.email}></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
-    )
+    );
   }
 }
