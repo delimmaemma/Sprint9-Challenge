@@ -105,10 +105,10 @@ export default function AppFunctional(props) {
     const nextIndex = index + dx + (dy * 3);
 
     const coordinatesMap = {
-      2: { x: 1, y: 3 },
-      3: { x: 2, y: 1 },
-      5: { x: 2, y: 3 },
-      6: { x: 3, y: 1 },
+      2: { x: 3, y: 1 },
+      3: { x: 1, y: 2 },
+      5: { x: 3, y: 2 },
+      6: { x: 1, y: 3 },
     };
 
     const { x, y } = coordinatesMap[nextIndex] || {};
@@ -153,7 +153,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates {message}</h3>
-        <h3 id="steps">{movement !== 1 ? `You moved ${movement} times` : `You moved ${movement} time`}</h3>
+        <h3 id="steps">You moved {movement} {movement !== 1 ? `times` : `time`}</h3>
       </div>
       <div id="grid">
         {
