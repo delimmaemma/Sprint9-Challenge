@@ -1,10 +1,3 @@
-// Can't go up from idx 3 to idx 0
-// Can't go down from idx 5 to idx 8
-// Can't go right from idx 6 to idx 7
-// Can't go left from idx 2 to idx 1
-// Can go OOB from idx 2 to idx -1
-// Can go OOB from idx 6 to idx 9
-
 import React from 'react';
 import axios from 'axios';
 

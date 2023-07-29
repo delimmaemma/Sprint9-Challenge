@@ -1,3 +1,7 @@
+// Can go OOB
+// Error messages don't accurately show
+// Active square can wrap
+
 import React, { useState } from 'react'
 import axios from 'axios'
 
