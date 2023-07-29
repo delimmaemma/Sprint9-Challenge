@@ -18,11 +18,16 @@ test('Header is present', () => {
   const header = screen.queryByText(/Coordinates/i)
   expect(header).toBeTruthy()
 })
+test('Buttons are present', () => {
+  render(<AppFunctional />)
+  const buttons = screen.queryAllByRole('button')
+  expect(buttons).toHaveLength(6)
+})
 test('Movement changes based upon button click', async () => {
   render(<AppFunctional />)
   const up = screen.queryByText(/up/i)
   userEvent.click(up)
-  const movement = await screen.findByText(/You moved 1 times/i)
+  const movement = await screen.findByText(/You moved 1 time/i)
   expect(movement).toBeInTheDocument()
 })
 test('Can input email', async () => {

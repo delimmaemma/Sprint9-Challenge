@@ -94,12 +94,7 @@ const AppFunctional = ({ className }) => {
     axios.post(URL, { x, y, steps, email })
       .then((res) => {
         setResponse(res.data.message);
-        setX(2);
-        setY(2);
-        setMessage(initialMessage);
         setEmail(initialEmail);
-        setSteps(initialSteps);
-        setIndex(initialIndex);
       })
       .catch((err) => {
         setEmail('');
@@ -110,7 +105,7 @@ const AppFunctional = ({ className }) => {
   return (
     <div id="wrapper" className={className}>
       <div className="info">
-        <h3 id="coordinates">Coordinates ({y}, {x})</h3>
+        <h3 id="coordinates">Coordinates ({x}, {y})</h3>
         <h3 id="steps">You moved {steps} {steps !== 1 ? `times` : `time`}</h3>
       </div>
       <div id="grid">
