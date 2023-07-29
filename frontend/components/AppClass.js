@@ -9,7 +9,7 @@ const initialIndex = 4;
 const URL = 'http://localhost:9000/api/result';
 
 export default class AppClass extends React.Component {
-  this.state = {
+  state = {
     x: 2,
     y: 2,
     steps: initialSteps,
