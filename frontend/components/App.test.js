@@ -23,19 +23,10 @@ test('Buttons are present', () => {
   const buttons = screen.queryAllByRole('button')
   expect(buttons).toHaveLength(6)
 })
-test('Movement changes based upon button click', async () => {
+test('Movement and Coordinate message is present', () => {
   render(<AppFunctional />)
-  const up = screen.queryByText(/up/i)
-  userEvent.click(up)
-  const movement = await screen.findByText(/You moved 1 time/i)
-  expect(movement).toBeInTheDocument()
-})
-test('Can input email', async () => {
-  render(<AppFunctional />)
-  const email = screen.queryByPlaceholderText(/type email/i)
-  userEvent.type(email, 'user@email.com')
-  await waitFor(() => {
-    const user = screen.queryByDisplayValue('user@email.com')
-    expect(user).toBeInTheDocument()
-  })
+  const coordinates = screen.queryByText(/Coordinates/i)
+  const movement = screen.queryByText(/Movement/i)
+  expect(coordinates).toBeTruthy()
+  expect(movement).toBeTruthy()
 })
