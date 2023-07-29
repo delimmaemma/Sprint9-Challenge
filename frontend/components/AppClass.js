@@ -37,6 +37,7 @@ export default class AppClass extends React.Component {
       email: initialEmail,
       steps: initialSteps,
       index: initialIndex,
+      response: initialResponse
     });
   };
 
@@ -121,8 +122,14 @@ export default class AppClass extends React.Component {
     axios.post(URL, this.state)
       .then((res) => {
         this.setState({ response: res.data.message });
-        console.log(this.state)
-        this.reset();
+        this.setState({
+          x: 2,
+          y: 2,
+          message: initialMessage,
+          email: initialEmail,
+          steps: initialSteps,
+          index: initialIndex,
+        });
       })
       .catch((err) => {
         this.setState({ email: '', response: err.response.data.message });
