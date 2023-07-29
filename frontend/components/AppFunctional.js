@@ -161,7 +161,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates {message}</h3>
-        <h3 id="steps">You moved {movement} times</h3>
+        <h3 id="steps">{movement !== 1 ? `You moved ${movement} times` : `You moved ${movement} time`}</h3>
       </div>
       <div id="grid">
         {
