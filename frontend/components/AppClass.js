@@ -43,7 +43,7 @@ export default class AppClass extends React.Component {
 
   getXY = (press) => {
     this.setState({ response: initialResponse});
-    const { x, y, index } = this.state;
+    const { x, y} = this.state;
     const changes = [
       [0, -1], // Left
       [-1, 0], // Up
@@ -144,7 +144,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates ({x}, {y})</h3>
-          <h3 id="steps">{steps !== 1 ? `You moved ${steps} times` : `You moved ${steps} time`}</h3>
+          <h3 id="steps">You moved {steps} {steps !== 1 ? `times` : `time`}</h3>
         </div>
         <div id="grid">
           {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((idx) => (

@@ -25,22 +25,9 @@ root.render(
 
 //Failing tests:
   // Name success message number is off
-  // Movement calculator is sometimes off
-  // OOB messages sometimes don't show up or show up when they shouldn't
-  // Coordinates are sometimes off
-  // Active square is sometimes in the wrong place with the following actions:
-    // Down down left left
-    // Right down down
-    // Right down
-    // Right right
-    // Up right right
-
-  // Possible fix for active square failure and movement caluclator failure:
-    // Fix movement pattern -- active square sometimes gets caught up on a square where it shouldn't be caught up at
-  // Possible fix for OOB messages:
-    // Prevent active square from wrapping around the grid
-  // Possible fix for name success message number:
-    // Unsure
+  // Certain coords are off
+  // Certain step counts are off
+  // Check OOB msgs
 
 
 
