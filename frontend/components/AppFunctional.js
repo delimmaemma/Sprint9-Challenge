@@ -27,6 +27,7 @@ export default function AppFunctional(props) {
   const [response, setResponse] = useState(initialResponse)
 
   function getXY(press) {
+    setResponse(initialResponse)
     //Left
     if(press === 1 && ycoord - 1 > 0) {
       ycoord -= 1;
@@ -82,7 +83,6 @@ export default function AppFunctional(props) {
     xcoord = 2;
     ycoord = 2;
     setMessage(initialMessage);
-    setResponse(initialResponse)
     setIndex(initialIndex);
     setState(initialState)
     setMovement(initialSteps)
