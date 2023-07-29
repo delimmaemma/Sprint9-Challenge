@@ -91,10 +91,10 @@ export default class AppClass extends React.Component {
     const nextIndex = index + (dx + dy * 3);
 
     const coordinatesMap = {
-      2: { x: 1, y: 3 },
-      3: { x: 2, y: 1 },
-      5: { x: 2, y: 3 },
-      6: { x: 3, y: 1 },
+      2: { x: 3, y: 1 },
+      3: { x: 1, y: 2 },
+      5: { x: 3, y: 2 },
+      6: { x: 1, y: 3 },
     };
 
     this.setState((prevState) => ({
@@ -109,7 +109,7 @@ export default class AppClass extends React.Component {
   move = () => {
     this.setState((prevState) => ({
       steps: prevState.steps + 1,
-      message: `(${prevState.y}, ${prevState.x})`,
+      message: `(${prevState.x}, ${prevState.y})`,
     }));
   };
 
