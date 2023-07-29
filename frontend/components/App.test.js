@@ -12,7 +12,7 @@ test('Nav links are present', () => {
   const nav = screen.queryAllByRole('nav')
   expect(nav).toBeTruthy()
 })
-test('Header is present', () => {
+test('Coordinates are present', () => {
   render(<AppFunctional />)
   const header = screen.queryByText(/Coordinates/i)
   expect(header).toBeTruthy()
@@ -22,10 +22,8 @@ test('Buttons are present', () => {
   const buttons = screen.queryAllByRole('button')
   expect(buttons).toHaveLength(6)
 })
-test('Movement and Coordinate message is present', () => {
+test('Movement is present', () => {
   render(<AppFunctional />)
-  const coordinates = screen.queryByText(/Coordinates/i)
-  const movement = screen.queryByText(/Movement/i)
-  expect(coordinates).toBeTruthy()
+  const movement = screen.queryByText(/You moved/i)
   expect(movement).toBeTruthy()
 })
